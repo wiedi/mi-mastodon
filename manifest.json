@@ -1,0 +1,12 @@
+{
+  "name":         "mastodon",
+  "version":      "21.4.1",
+  "description":  "mastodon",
+  "organization": "Frubar",
+  "brand":        "Instance",
+  "homepage":     "https://github.com/wiedi/mi-mastodon",
+  "base":         "ae9666e0-ba7b-4d82-904b-07268877e265",
+  "minram":       4096,
+  "customer_metadata": {
+  }
+}

@@ -1,0 +1,20 @@
+╭──────────────────────────────────────────────────────────────────────╮
+│ 🐘 MASTODON                                                          │
+╰──────────────────────────────────────────────────────────────────────╯
+
+[ %name% %version% | %homepage% ]
+
+First time setup:
+- /opt/mastodon/bin/mastodon-init.sh
+
+Create new config (as mastodon user in /opt/mastodon/live):
+- RAILS_ENV=production bundle exec rake mastodon:setup
+
+Reuse existing config (as mastodon user in /opt/mastodon/live):
+- adjust /opt/mastodon/live/.env.production
+- RAILS_ENV=production bundle exec rails db:setup
+- RAILS_ENV=production bundle exec rails assets:precompile
+
+Enable services:
+- svcadm enable mastodon/puma mastodon/streaming mastodon/sidekiq:default
+

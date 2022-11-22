@@ -1,0 +1,52 @@
+#!/usr/bin/bash
+set -o errexit
+
+MASTODON_VERSION=v4.0.2
+
+MUNIN_PLUGINS="
+        cert_expire
+        cputime
+        df
+        load
+        uptime
+        users
+        proc_state
+        vfs_bytes
+        vfs_iops
+        vfs_latency
+        if_net0
+        pkg_audit
+        memory_cap
+        swap_cap
+        smf
+        tcp
+        udp
+        nginx_request
+        nginx_status
+"
+/opt/core/bin/munin-node-plugins ${MUNIN_PLUGINS}
+
+echo "Clear out default db"
+rm -rf /var/pgsql
+
+echo "Creating mastodon user"
+groupadd mastodon
+useradd -d /opt/mastodon -g mastodon -s /usr/bin/bash mastodon
+mkdir -p /opt/mastodon
+chown -R mastodon:mastodon /opt/mastodon/
+echo "export RAILS_ENV=production" >> /opt/mastodon/.bash_profile
+echo 'PS1="[\u@\H \w]\\$ "' >> /opt/mastodon/.bash_profile
+
+echo "Setting up source"
+sudo -u mastodon git clone https://github.com/tootsuite/mastodon.git /opt/mastodon/live -b $MASTODON_VERSION
+
+echo "Importing manifests"
+svccfg import /tmp/puma.xml
+svccfg import /tmp/streaming.xml
+svccfg import /tmp/sidekiq.xml
+
+
+echo "Cleaning up"
+rm -rf /root/*
+rm -rf /home/admin/.[^.]*
+sm-prepare-image -y

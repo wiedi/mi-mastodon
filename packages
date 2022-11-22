@@ -1,0 +1,15 @@
+curl
+wget
+gnupg
+nodejs
+npm
+yarn
+file
+ImageMagick
+ffmpeg4
+nginx
+build-essential
+postgresql14-server
+postgresql14-client
+redis
+ruby30
